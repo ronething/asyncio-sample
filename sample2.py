@@ -12,17 +12,22 @@ Less is more.
 import asyncio
 import random
 import functools
+from asyncio import Task
 
 
-def print_res(res):
-    print(res)
+def print_res(res: Task):
+    if not res.exception():
+        print(res.result())
+    else:
+        # 发生异常
+        print(res)
     # print(res._result)
 
 
 async def cron_scheduler():
     page = 1
     while True:
-        # await asyncio.sleep(1)
+        # await asyncio.sleep(0.2)
         job = cron_job(F"https://baidu.com/{page}")
         # await job # 在当前协程中等待其他协程完成 会阻塞
         # 正确做法 create_task 将 job 分离出去 由 loop 调度
